@@ -9,7 +9,7 @@ import {
   InputItem,
   Icon
 } from 'antd-mobile'
-
+///注册
 export default class RegisterScreen extends Component {
   constructor(props) {
     super(props)
@@ -69,4 +69,3 @@ render(){
 }
 
 }
-  
