@@ -13,7 +13,7 @@ import FriendListItem from '../ViewComponent/FriendListItem';
 export default class HomeScreen extends Component {
     async componentDidMount() {
         if (accountManager.isLogin() === false) {
-            retuen;
+            return;
         }
         const result = await messageManager.homeMessage();
         if (result.success === false) {
