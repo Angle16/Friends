@@ -1,5 +1,5 @@
-const host = 'http://60.205.141.116:';
-const port = 60004;
+const host = 'http://localhost:';
+const port = 9106;
 
 const loginURL = host+port+'/api/login';
 const registerURL = host+port+'/api/register';
