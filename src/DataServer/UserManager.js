@@ -1,29 +1,27 @@
-import { 
+import {
     createUserURL,
     updateUserURL,
-    getUserURL
+    getUserURL,
 } from './URLConfig';
+
 import axios from 'axios';
+
 class UserManager {
-    
     async createUser(nickname,sign,image){
         try {
-           const access_token = localStorage.access_token; 
-           const formData=new FormData();
-           formData.append('access_token',access_token);
-           formData.append('nickname',nickname);
-           formData.append('sign',sign);
-           formData.append('image',image.file);
+            const access_token = localStorage.access_token;
+            const formData = new FormData();
+            formData.append('access_token',access_token);
+            formData.append('nickname',nickname);
+            formData.append('sign',sign);
+            formData.append('image',image.file);
+
             const res = await axios({
                 url:createUserURL,
                 method:'POST',
-                headers:{
-                 
-                    'Content-Type':'multipart/form-data'
-                }
-               
-            });
-
+                data:formData,
+                headers: {'Content-Type': 'multipart/form-data'}
+            })
             return res.data;
 
         } catch (error) {

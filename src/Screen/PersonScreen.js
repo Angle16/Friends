@@ -7,12 +7,13 @@ import {
     WingBlank,
     WhiteSpace,
     InputItem,
-    Flex
+    Flex,
+    List
 } from 'antd-mobile';
 
 import {
     imageBaseURL
-} from '../DataServe/URLConfig';
+} from '../DataServer/URLConfig';
 
 import accountManager from '../DataServer/AccountManager';
 import userManager from '../DataServer/UserManager';

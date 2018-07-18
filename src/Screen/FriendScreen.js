@@ -1,66 +1,77 @@
 import React, { Component } from 'react'
-import {
- 
-  Toast,
-  NavBar,
- ListView,
- PullToRefresh,
- SearchBar
+
+import { 
+    Toast,
+    NavBar,
+    ListView,
+    PullToRefresh,
+    SearchBar
 } from 'antd-mobile';
 
 import accountManager from '../DataServer/AccountManager';
-import friendManager from "../DataSever/FriendManager";
+import friendManager from '../DataServer/FriendManager';
+
 import FriendListItem from '../ViewComponent/FriendListItem';
 
 export default class FriendScreen extends Component {
-    async componentDidMount() {
-        if (accountManager.isLogin() === false) {
+
+    async componentDidMount(){
+        
+        if(accountManager.isLogin() === false){
             return;
         }
-        const result = await friendManager.getFollows();
-        if (result.success === false) {
+
+        const result = await friendManager.getFollows()
+        if(result.success === false){
             Toast.fail(result.errorMessage);
             return;
         }
-        this.setState((preState) => {
-            return {
-                dataSource: preState.dataSource.cloneWithRows(result.data)
-            }
+        this.setState((preState)=>{
+            return{
+                dataSource:preState.dataSource.cloneWithRows(result.data)
+            }   
         })
+
     }
+
     constructor(props) {
         super(props)
+
         const dataSource = new ListView.DataSource({
-            rowHasChanged: (row1, row2) => row1 !== row2,
+            rowHasChanged:(row1, row2) => row1 !== row2,
         })
+
         this.state = {
             dataSource,
-            refreshing: false,
+            refreshing:false,
             nickname:'',
             isSearchData:false,
         }
     }
-    onRefresh = async () => {
+
+    onRefresh = async()=>{
         try {
-            this.setState({ refreshing: true });
+            this.setState({refreshing:true});
             const result = await friendManager.getFollows()
-            if (result.success === false) {
+            if(result.success === false){
                 Toast.fail(result.errorMessage);
-                this.setState({ refreshing: false });
+                this.setState({refreshing:false});
                 return;
             }
-            this.setState((preState) => {
-                return {
-                    dataSource: preState.dataSource.cloneWithRows(result.data),
-                    refreshing: false
-                }
+            this.setState((preState)=>{
+                return{
+                    dataSource:preState.dataSource.cloneWithRows(result.data),
+                    refreshing:false
+                }   
             })
         } catch (error) {
             Toast.fail(`${error}`);
-            this.setState({ refreshing: false });
+            this.setState({refreshing:false});
         }
+
     }
-    onSearch=async()=>{
+
+    onSearch = async ()=>{
         this.setState({
             isSearchData:true,
         })
@@ -78,7 +89,6 @@ export default class FriendScreen extends Component {
                 dataSource:preState.dataSource.cloneWithRows(result.data)
             }   
         })
-    
     }
     onCancel = async ()=>{
         this.setState({
@@ -122,45 +132,44 @@ export default class FriendScreen extends Component {
         })
     }
 
-    render() {
-        return (
-            <div>
-                <NavBar
-                    mode="dark"
-                 
-                        >朋友</NavBar>
-                        <SearchBar
-                        placeholder={'输入好友昵称'}
-                        value={this.state.nickname}
-                        onChange={(nickname)=>{this.setState({nickname})}}
-                        onSubmit={this.onSearch}
-                        onCancel={this.onCancel}
-                        />
-                <ListView
-                    useBodyScroll={true}
-                    dataSource={this.state.dataSource}
-                    PullToRefresh={
-                        <PullToRefresh
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
-                        />
-
-                    }
-                    renderRow={(user) => {
-                        return (
-                            <FriendListItem
-                                {...user}
-                                onItemClick={()=>{
-                                    this.props.history.push('UserScreen',user)
-                                }}
-                                del={this.onDel}
-                            />
-                        )
-                    }}
-                />
-
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <NavBar
+            mode="dark"
+        >朋友</NavBar>
+        <SearchBar
+            placeholder={'输入好友昵称'}
+            value={this.state.nickname}
+            onChange={(nickname)=>{this.setState({nickname})}}
+            onSubmit={this.onSearch}
+            onCancel={this.onCancel}
+        />
+        <ListView
+            useBodyScroll={true}
+            dataSource={this.state.dataSource}
+            pullToRefresh={
+                this.state.isSearchData?null:(
+                    <PullToRefresh
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh}
+                    />
+                )
+                
+            }
+            renderRow={(user)=>{
+                return (
+                    <FriendListItem 
+                        {...user}
+                        onItemClick={()=>{
+                            this.props.history.push('/UserScreen',user)
+                        }} 
+                        del={this.onDel}
+                    />
+                )
+            }}
+        />
+      </div>
+    )
+  }
 }
-

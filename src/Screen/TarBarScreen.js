@@ -5,7 +5,7 @@ import {
 } from 'antd-mobile';
 import HomeScreen from './HomeScreen';
 import FriendScreen from "./FriendScreen";
-import PersonSceen from './PersonScreen';
+import PersonScreen from './PersonScreen';
 import accountManager from '../DataServer/AccountManager';
 
 export default class TabBarScreen extends Component {
