@@ -83,7 +83,7 @@ export default class RegisterScreen extends Component {
                     }
                     Modal.alert('成功','点击确认键进入主页',[{
                         text:'确认',
-                        onPress:()=>{this.props.history.replace('/TabBarScreen')}
+                        onPress:()=>{this.props.history.replace('/TarBarScreen')}
                     }])
                     
                 }}
