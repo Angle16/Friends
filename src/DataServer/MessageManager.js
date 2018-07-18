@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import {
     postMessageURL,
     getMessageURL,
@@ -9,20 +11,23 @@ class MessageManager {
     async postMessage(content,images){
         try {
             const access_token = localStorage.access_token;
-            console.log(access_token);
             const formData = new FormData();
             formData.append('access_token',access_token);
             formData.append('content',content);
-            images.map((image,index)=>{
-                formData.append(`image${index}`,image.file);
-            })
-            console.log(content);
-            const res = await fetch(postMessageURL,{
+            if (images) {
+                images.map((image,index)=>{
+                    formData.append(`image${index+1}`,image.file);
+                    return '';
+                })
+            }
+
+            const res = await axios({
+                url:postMessageURL,
                 method:'POST',
-                body:formData
+                data:formData,
+                headers: {'Content-Type': 'multipart/form-data'}
             })
-            const result=await res.json();
-            return result;
+            return res.data;
 
         } catch (error) {
             return {
@@ -31,10 +36,11 @@ class MessageManager {
             }
         }
     }
+
     async deleteMessage(messageId){
         try {
             const access_token = localStorage.access_token;
-            const res = await fetch.post(deleteMessageURL,{
+            const res = await axios.post(deleteMessageURL,{
                 access_token,
                 messageId
             })
@@ -46,23 +52,15 @@ class MessageManager {
             }
         }  
     }
+
     async homeMessage(minId){
         try {
             const access_token = localStorage.access_token;
-            const user={
+            const res = await axios.post(homeMessageURL,{
                 access_token,
                 minId
-            }
-            const res=await fetch(homeMessageURL,{
-                method:'POST',
-                headers:{
-                    'Accept':'application/json',
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify(user)
             })
-            const result=await res.json();
-            return result;
+            return res.data;
         } catch (error) {
             return {
                 success:false,
@@ -70,25 +68,16 @@ class MessageManager {
             }
         }  
     }
-    async getMessage(userId){
+
+    async getUserMessage(userId,minId){
         try {
-            const user={
-                access_token:localStorage.access_token,
-                userId,  
-            }
-            console.log(user);
-            
-            const res = await fetch(getMessageURL,{
-                method:'POST',
-                headers:{
-                    'Accept':'application/json',
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify(user)
+            const access_token = localStorage.access_token;
+            const res = await axios.post(getMessageURL,{
+                access_token,
+                userId,
+                minId
             })
-            const result=await res.json();
-            console.log(result);
-            return result;
+            return res.data;
         } catch (error) {
             return {
                 success:false,
@@ -96,6 +85,10 @@ class MessageManager {
             }
         }  
     }
+
+    
+
+
 }
 
 export default new MessageManager();

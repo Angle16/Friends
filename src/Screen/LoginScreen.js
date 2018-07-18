@@ -11,7 +11,7 @@ import accountManager from '../DataServer/AccountManager';
 export default class LoginScreen extends Component{
     componentDidCatch(){
         if(accountManager.isLogin()===true){
-            this.props.history.replacr('/TabBarScreen');
+            this.props.history.replacr('/TarBarScreen');
         }
     }
     constructor(props){
@@ -62,10 +62,19 @@ export default class LoginScreen extends Component{
                                     this.props.history.push('/CreateUserScreen');
                                     return;
                                 }
-                                this.props.history.replace('/TabBarScreen');
+                                this.props.history.replace('/TarBarScreen');
                             }}
                             >登录
                                 </Button>
+                                <Button
+                    style={{flex:1,marginLeft:5}}
+                    type={'primary'}
+                    onClick={async()=>{
+                        this.props.history.push('/RegisterScreen');
+                    }}
+                >
+                    注册
+                </Button>  
                             </Flex>
                             </WingBlank>
                 </div>
